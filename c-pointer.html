@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포인터와 메모리 - Tech Wiki</title>
+    <!-- index.html과 디자인을 똑같이 맞추기 위해 상단 CSS 스타일은 동일하게 유지합니다 -->
+    <style>
+        /* (위에 적힌 index.html의 style 태그 안쪽 코드를 그대로 복사해서 유지해주세요. 본문 가독성을 위해 생략합니다.) */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: sans-serif; background-color: #f8f9fa; color: #333; display: flex; min-height: 100vh; }
+        .sidebar { width: 300px; background-color: #1e293b; color: #f8fafc; padding: 40px 25px; position: fixed; top: 0; bottom: 0; left: 0; overflow-y: auto; }
+        .sidebar-title { font-size: 20px; font-weight: 800; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #334155; color: #38bdf8; }
+        .category-title { font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; margin: 20px 0 8px 0; letter-spacing: 1px; }
+        .menu-list { list-style: none; }
+        .menu-link { color: #cbd5e1; text-decoration: none; font-size: 14px; display: block; padding: 8px 10px; border-radius: 6px; transition: all 0.2s; }
+        .menu-link:hover { background-color: #334155; color: #ffffff; padding-left: 15px; }
+        .menu-link.active { background-color: #38bdf8; color: #1e293b; font-weight: bold; }
+        .main-content { margin-left: 300px; flex-grow: 1; padding: 60px 50px; max-width: 1050px; }
+        .wiki-header { border-bottom: 2px solid #38bdf8; padding-bottom: 15px; margin-bottom: 30px; }
+        .wiki-title { font-size: 32px; color: #0f172a; font-weight: 800; }
+        .wiki-notice { background: #fbfbfe; border-left: 4px solid #38bdf8; padding: 15px 20px; border-radius: 8px; margin-bottom: 30px; font-size: 14px; color: #1e293b; }
+        .wiki-text h2 { font-size: 22px; color: #1e293b; margin: 35px 0 15px 0; padding-bottom: 5px; border-bottom: 1px solid #e2e8f0; }
+        .wiki-text p { font-size: 16px; line-height: 1.8; color: #334155; margin-bottom: 15px; }
+        .wiki-inner-link { color: #0284c7; text-decoration: none; font-weight: 500; border-bottom: 1px dashed #0284c7; }
+        .wiki-inner-link:hover { color: #0369a1; background-color: #e0f2fe; border-bottom-style: solid; }
+        .code-box { background: #1e1e1e; color: #d4d4d4; font-family: 'Courier New', monospace; padding: 15px; border-radius: 8px; font-size: 14px; overflow-x: auto; margin: 15px 0; }
+        footer { margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 20px; color: #94a3b8; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+    <!-- 왼쪽 사이드바 목차 (메인과 동일, 여기서는 포인터에 active 속성을 줍니다) -->
+    <nav class="sidebar">
+        <div class="sidebar-title">🖥️ Tech Wiki</div>
+        <ul class="menu-list">
+            <li><a href="index.html" class="menu-link">🏠 대문</a></li>
+        </ul>
+        <div class="category-title">1. C언어</div>
+        <ul class="menu-list">
+            <li><a href="c-pointer.html" class="menu-link active">💡 포인터와 메모리</a></li>
+        </ul>
+        <div class="category-title">2. 네트워크</div>
+        <ul class="menu-list">
+            <li><a href="network-socket.html" class="menu-link">🌐 소켓 프로그래밍</a></li>
+        </ul>
+        <div class="category-title">3. 리버싱</div>
+        <ul class="menu-list">
+            <li><a href="reverse-packet.html" class="menu-link">🔍 패킷 & 리버스 엔지니어링</a></li>
+        </ul>
+        <div class="category-title">4. 데이터베이스</div>
+        <ul class="menu-list">
+            <li><a href="db-design.html" class="menu-link">🗄️ DB 설계 원리</a></li>
+        </ul>
+    </nav>
+
+    <!-- 오른쪽 본문 -->
+    <main class="main-content">
+        <div class="wiki-header">
+            <h1 class="wiki-title">포인터와 메모리 구조</h1>
+        </div>
+
+        <div class="wiki-notice">
+            상위 항목: <a href="index.html" class="wiki-inner-link">컴퓨터 공학 학습 아카이브</a>
+        </div>
+
+        <div class="wiki-text">
+            <h2>1. 개요</h2>
+            <p>C언어에서 포인터(Pointer)는 메모리의 주소값을 직접 가리키는 변수 유형입니다. 이 특성은 대량의 데이터를 효율적으로 다루거나 <a href="network-socket.html" class="wiki-inner-link">소켓 프로그래밍</a>에서 통신 버퍼를 핸들링할 때 핵심적인 역할을 합니다.</p>
+
+            <h2>2. 기본 예제</h2>
+            <p>포인터 변수를 선언할 때는 변수명 앞에 애스터리스크(*)를 붙여 선언합니다.</p>
+            
+            <pre class="code-box"><code>int target = 42;
+int *ptr = &amp;target; // target의 메모리 주소를 ptr에 저장</code></pre>
+
+            <p>여기서 가리키는 주소값을 따라가 내부 데이터를 위조하거나 분석하는 기술은 시스템 해킹이나 <a href="reverse-packet.html" class="wiki-inner-link">패킷 & 리버스 엔지니어링</a>의 기초 학문이 됩니다.</p>
+        </div>
+
+        <footer>
+            © 2026 제아이디-eng. Powered by GitHub Pages.
+        </footer>
+    </main>
+
+</body>
+</html>
