@@ -4,33 +4,153 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>포인터와 메모리 - Tech Wiki</title>
-    <!-- index.html과 디자인을 똑같이 맞추기 위해 상단 CSS 스타일은 동일하게 유지합니다 -->
     <style>
-        /* (위에 적힌 index.html의 style 태그 안쪽 코드를 그대로 복사해서 유지해주세요. 본문 가독성을 위해 생략합니다.) */
+        /* [공통 스타일] */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: sans-serif; background-color: #f8f9fa; color: #333; display: flex; min-height: 100vh; }
-        .sidebar { width: 300px; background-color: #1e293b; color: #f8fafc; padding: 40px 25px; position: fixed; top: 0; bottom: 0; left: 0; overflow-y: auto; }
-        .sidebar-title { font-size: 20px; font-weight: 800; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #334155; color: #38bdf8; }
-        .category-title { font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; margin: 20px 0 8px 0; letter-spacing: 1px; }
+        body {
+            font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* [사이드바 설정] */
+        .sidebar {
+            width: 300px;
+            background-color: #1e293b;
+            color: #f8fafc;
+            padding: 40px 25px;
+            position: fixed;
+            top: 0; bottom: 0; left: 0;
+            overflow-y: auto;
+        }
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #334155;
+            color: #38bdf8;
+        }
+        .category-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            margin: 20px 0 8px 0;
+            letter-spacing: 1px;
+        }
         .menu-list { list-style: none; }
-        .menu-link { color: #cbd5e1; text-decoration: none; font-size: 14px; display: block; padding: 8px 10px; border-radius: 6px; transition: all 0.2s; }
-        .menu-link:hover { background-color: #334155; color: #ffffff; padding-left: 15px; }
-        .menu-link.active { background-color: #38bdf8; color: #1e293b; font-weight: bold; }
-        .main-content { margin-left: 300px; flex-grow: 1; padding: 60px 50px; max-width: 1050px; }
-        .wiki-header { border-bottom: 2px solid #38bdf8; padding-bottom: 15px; margin-bottom: 30px; }
-        .wiki-title { font-size: 32px; color: #0f172a; font-weight: 800; }
-        .wiki-notice { background: #fbfbfe; border-left: 4px solid #38bdf8; padding: 15px 20px; border-radius: 8px; margin-bottom: 30px; font-size: 14px; color: #1e293b; }
-        .wiki-text h2 { font-size: 22px; color: #1e293b; margin: 35px 0 15px 0; padding-bottom: 5px; border-bottom: 1px solid #e2e8f0; }
-        .wiki-text p { font-size: 16px; line-height: 1.8; color: #334155; margin-bottom: 15px; }
-        .wiki-inner-link { color: #0284c7; text-decoration: none; font-weight: 500; border-bottom: 1px dashed #0284c7; }
-        .wiki-inner-link:hover { color: #0369a1; background-color: #e0f2fe; border-bottom-style: solid; }
-        .code-box { background: #1e1e1e; color: #d4d4d4; font-family: 'Courier New', monospace; padding: 15px; border-radius: 8px; font-size: 14px; overflow-x: auto; margin: 15px 0; }
+        .menu-link {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 14px;
+            display: block;
+            padding: 8px 10px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .menu-link:hover {
+            background-color: #334155;
+            color: #ffffff;
+            padding-left: 15px;
+        }
+        .menu-link.active {
+            background-color: #38bdf8;
+            color: #1e293b;
+            font-weight: bold;
+        }
+
+        /* [오른쪽 본문 영역 설정] */
+        .main-content {
+            margin-left: 300px;
+            flex-grow: 1;
+            padding: 60px 50px;
+            max-width: 1050px;
+            width: 100%;
+        }
+        .wiki-header {
+            border-bottom: 2px solid #38bdf8;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        .wiki-title {
+            font-size: 32px;
+            color: #0f172a;
+            font-weight: 800;
+        }
+        .wiki-notice {
+            background: #fbfbfe;
+            border-left: 4px solid #38bdf8;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #1e293b;
+        }
+        .wiki-text h2 {
+            font-size: 22px;
+            color: #1e293b;
+            margin: 35px 0 15px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .wiki-text p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #334155;
+            margin-bottom: 15px;
+        }
+        .wiki-inner-link {
+            color: #0284c7;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px dashed #0284c7;
+        }
+        .wiki-inner-link:hover {
+            color: #0369a1;
+            background-color: #e0f2fe;
+            border-bottom-style: solid;
+        }
+        
+        /* 💻 C언어 코드 박스 (모바일에서 넘치면 가로 스크롤 생성) */
+        .code-box {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre; /* 코드 줄바꿈 유지 */
+        }
         footer { margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 20px; color: #94a3b8; font-size: 13px; }
+
+        /* --------------------------------------------------
+           📱 모바일 반응형 레이아웃 (스마트폰 규격 맞춤 설정)
+        -------------------------------------------------- */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { 
+                width: 100%; 
+                position: relative; 
+                height: auto; 
+                padding: 20px; 
+            }
+            .main-content { 
+                margin-left: 0; 
+                padding: 30px 20px; 
+            }
+            .wiki-title {
+                font-size: 24px; /* 모바일에서는 제목을 조금 작게 */
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- 왼쪽 사이드바 목차 (메인과 동일, 여기서는 포인터에 active 속성을 줍니다) -->
     <nav class="sidebar">
         <div class="sidebar-title">🖥️ Tech Wiki</div>
         <ul class="menu-list">
@@ -40,21 +160,20 @@
         <ul class="menu-list">
             <li><a href="c-pointer.html" class="menu-link active">💡 포인터와 메모리</a></li>
         </ul>
-        <div class="category-title">2. 네트워크</div>
+        <div class="category-title">2. NETWORK</div>
         <ul class="menu-list">
             <li><a href="network-socket.html" class="menu-link">🌐 소켓 프로그래밍</a></li>
         </ul>
-        <div class="category-title">3. 리버싱</div>
+        <div class="category-title">3. REVERSING</div>
         <ul class="menu-list">
             <li><a href="reverse-packet.html" class="menu-link">🔍 패킷 & 리버스 엔지니어링</a></li>
         </ul>
-        <div class="category-title">4. 데이터베이스</div>
+        <div class="category-title">4. DATABASE</div>
         <ul class="menu-list">
             <li><a href="db-design.html" class="menu-link">🗄️ DB 설계 원리</a></li>
         </ul>
     </nav>
 
-    <!-- 오른쪽 본문 -->
     <main class="main-content">
         <div class="wiki-header">
             <h1 class="wiki-title">포인터와 메모리 구조</h1>
@@ -78,7 +197,7 @@ int *ptr = &amp;target; // target의 메모리 주소를 ptr에 저장</code></p
         </div>
 
         <footer>
-            © 2026 제아이디-eng. Powered by GitHub Pages.
+            © 2026 KY. All rights reserved.
         </footer>
     </main>
 
