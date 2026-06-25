@@ -3,77 +3,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CS & 개발 지식 위키</title>
+    <title>Tech Archive - 지식 위키</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: sans-serif; background: #f6f8fa; color: #24292f; display: flex; min-height: 100vh; }
-        
-        /* 위키 사이드바 */
-        .wiki-sidebar { width: 280px; background: #ffffff; border-right: 1px solid #d0d7de; padding: 30px 20px; position: fixed; height: 100vh; }
-        .wiki-logo { font-size: 22px; font-weight: bold; color: #0969da; margin-bottom: 25px; }
-        .category-title { font-size: 14px; font-weight: bold; color: #57606a; margin: 15px 0 5px 0; }
-        .menu-list { list-style: none; padding-left: 10px; }
-        .menu-list a { color: #0969da; text-decoration: none; font-size: 14px; display: block; padding: 4px 0; }
-        .menu-list a:hover { text-decoration: underline; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            min-height: 100vh;
+        }
 
-        /* 위키 본문 */
-        .wiki-body { margin-left: 280px; flex-grow: 1; padding: 40px 60px; max-width: 1000px; }
-        .wiki-title { font-size: 32px; font-weight: normal; border-bottom: 1px solid #d0d7de; padding-bottom: 8px; margin-bottom: 20px; }
-        .wiki-notice { background: #fff8c5; border: 1px solid #d4a72c; padding: 15px; border-radius: 6px; margin-bottom: 25px; font-size: 14px; }
-        
-        /* 위키 스타일 박스 (나무위키 스타일 틀) */
-        .wiki-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        .wiki-table td { border: 1px solid #d0d7de; padding: 12px; }
-        .wiki-table-label { background: #f6f8fa; font-weight: bold; width: 30; text-align: center; }
+        /* --------------------------------------------------
+           사이드바 목차 (세련된 다크 네이비)
+        -------------------------------------------------- */
+        .sidebar {
+            width: 300px;
+            background-color: #1e293b;
+            color: #f8fafc;
+            padding: 40px 25px;
+            position: fixed;
+            top: 0; bottom: 0; left: 0;
+            overflow-y: auto;
+        }
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #334155;
+            color: #38bdf8;
+        }
+        .category-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            margin: 20px 0 8px 0;
+            letter-spacing: 1px;
+        }
+        .menu-list { list-style: none; }
+        .menu-link {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 14px;
+            display: block;
+            padding: 8px 10px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .menu-link:hover {
+            background-color: #334155;
+            color: #ffffff;
+            padding-left: 15px;
+        }
+        .menu-link.active {
+            background-color: #38bdf8;
+            color: #1e293b;
+            font-weight: bold;
+        }
 
-        .wiki-text { line-height: 1.8; font-size: 16px; }
-        .wiki-link { color: #0969da; text-decoration: none; }
-        .wiki-link:hover { text-decoration: underline; }
+        /* --------------------------------------------------
+           오른쪽 위키 본문 영역
+        -------------------------------------------------- */
+        .main-content {
+            margin-left: 300px;
+            flex-grow: 1;
+            padding: 60px 50px;
+            max-width: 1050px;
+        }
+        .wiki-header {
+            border-bottom: 2px solid #38bdf8;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        .wiki-title {
+            font-size: 32px;
+            color: #0f172a;
+            font-weight: 800;
+        }
+
+        /* 나무위키식 상단 알림 틀 */
+        .wiki-notice {
+            background: #f0fdf4;
+            border-left: 4px solid #4ade80;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #166534;
+        }
+
+        /* 나무위키식 프로필/개요 요약 테이블 */
+        .wiki-summary-table {
+            width: 100%;
+            max-width: 450px;
+            border-collapse: collapse;
+            float: right; /* 우측 정렬 배치 */
+            margin-left: 25px;
+            margin-bottom: 20px;
+            border: 1px solid #cbd5e1;
+            border-top: 3px solid #1e293b;
+            background: #fff;
+            font-size: 14px;
+        }
+        .wiki-summary-table th {
+            background: #f1f5f9;
+            padding: 12px;
+            font-size: 16px;
+            color: #1e293b;
+            border-bottom: 1px solid #cbd5e1;
+        }
+        .wiki-summary-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .summary-label {
+            background: #f8fafc;
+            font-weight: bold;
+            color: #475569;
+            width: 35%;
+            text-align: center;
+            border-right: 1px solid #e2e8f0;
+        }
+
+        /* 본문 텍스트 스타일 */
+        .wiki-text h2 {
+            font-size: 22px;
+            color: #1e293b;
+            margin: 35px 0 15px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .wiki-text p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #334155;
+            margin-bottom: 15px;
+        }
+
+        /* 🔥 나무위키의 핵심: 문서 내 하이퍼링크 스타일 */
+        .wiki-inner-link {
+            color: #0284c7;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px dashed #0284c7;
+        }
+        .wiki-inner-link:hover {
+            color: #0369a1;
+            background-color: #e0f2fe;
+            border-bottom-style: solid;
+        }
+
+        footer {
+            margin-top: 8px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+            color: #94a3b8;
+            font-size: 13px;
+            clear: both;
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; position: relative; height: auto; padding: 20px; }
+            .main-content { margin-left: 0; padding: 30px 20px; }
+            .wiki-summary-table { float: none; width: 100%; margin-left: 0; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- 왼쪽 위키 목차 -->
-    <aside class="wiki-sidebar">
-        <div class="wiki-logo">📖 나의 지식 위키</div>
+    <!-- 왼쪽 사이드바 목차 -->
+    <nav class="sidebar">
+        <div class="sidebar-title">🖥️ Tech Wiki</div>
         
-        <div class="category-title">C언어</div>
         <ul class="menu-list">
-            <li><a href="index.html">메인 페이지</a></li>
-            <li><a href="c-pointer.html">포인터 개론</a></li>
+            <li><a href="index.html" class="menu-link active">🏠 대문</a></li>
         </ul>
 
-        <div class="category-title">네트워크</div>
+        <div class="category-title">1. C언어</div>
         <ul class="menu-list">
-            <li><a href="network-basic.html">OSI 7계층 개요</a></li>
+            <li><a href="c-pointer.html" class="menu-link">💡 포인터와 메모리</a></li>
         </ul>
-    </aside>
 
-    <!-- 오른쪽 위키 본문 -->
-    <main class="wiki-body">
-        <h1 class="wiki-title">대문: 컴퓨터 공학 아카이브</h1>
-        
-        <div class="wiki-notice">
-            💡 본 사이트는 개인의 학습 데이터를 누적하고 정리하는 백과사전식 위키 공간입니다.
+        <div class="category-title">2. 네트워크</div>
+        <ul class="menu-list">
+            <li><a href="network-socket.html" class="menu-link">🌐 소켓 프로그래밍</a></li>
+        </ul>
+
+        <div class="category-title">3. 리버싱</div>
+        <ul class="menu-list">
+            <li><a href="reverse-packet.html" class="menu-link">🔍 패킷 & 리버스 엔지니어링</a></li>
+        </ul>
+
+        <div class="category-title">4. 데이터베이스</div>
+        <ul class="menu-list">
+            <li><a href="db-design.html" class="menu-link">🗄️ DB 설계 원리</a></li>
+        </ul>
+    </nav>
+
+    <!-- 오른쪽 본문 -->
+    <main class="main-content">
+        <div class="wiki-header">
+            <h1 class="wiki-title">컴퓨터 공학 학습 아카이브</h1>
         </div>
+
+        <div class="wiki-notice">
+            📌 <b>안내:</b> 본 사이트는 개인 공부 자료를 나무위키 백과사전 방식으로 촘촘하게 링크하여 정리해 나가는 지식 저장소입니다.
+        </div>
+
+        <!-- 나무위키식 개요 틀 (오른쪽 배치) -->
+        <table class="wiki-summary-table">
+            <tr>
+                <th colspan="2">💻 학습 아카이브 요약</th>
+            </tr>
+            <tr>
+                <td class="summary-label">소유자</td>
+                <td>제아이디-eng</td>
+            </tr>
+            <tr>
+                <td class="summary-label">주요 분야</td>
+                <td>C언어, 네트워크, 리버싱, DB</td>
+            </tr>
+            <tr>
+                <td class="summary-label">운영 목적</td>
+                <td>백과사전식 지식 누적 및 포인터 연계 학습</td>
+            </tr>
+        </table>
 
         <div class="wiki-text">
             <h2>1. 개요</h2>
-            <p>공부한 지식들을 나무위키 형태로 정리합니다. 문서 내의 파란색 링크를 클릭하면 해당 문서로 이동합니다.</p>
-            <br>
-            
-            <h2>2. 학습 로드맵 목록</h2>
-            <table class="wiki-table">
-                <tr>
-                    <td class="wiki-table-label">C언어</td>
-                    <td>기초 문법부터 메모리 구조 심화 학습. 상세 내용은 <a class="wiki-link" href="c-pointer.html">포인터 개론</a> 참고.</td>
-                </tr>
-                <tr>
-                    <td class="wiki-table-label">네트워크</td>
-                    <td>소켓 프로그래밍 및 <a class="wiki-link" href="network-basic.html">OSI 7계층 개요</a> 공부 기록.</td>
-                </tr>
-            </table>
+            <p>기초 컴퓨터 과학 지식부터 심화 보안/인프라 영역까지 학습한 내용을 유기적으로 연결하여 기록합니다. 모든 주제는 독립되어 있지 않고 서로 연계됩니다.</p>
+
+            <h2>2. 카테고리별 바로가기</h2>
+            <p>
+                본 위키는 크게 네 가지 핵심 축으로 구성되어 있습니다. 하단의 파란색 링크를 누르거나 왼쪽 목차를 통해 개별 문서로 이동할 수 있습니다.
+            </p>
+            <p>
+                • <b>C언어 학습:</b> 하드웨어와 가장 가까운 언어로, 깊이 있는 이해를 위해 <a href="c-pointer.html" class="wiki-inner-link">포인터와 메모리</a> 구조 분석 내용을 정리합니다.<br>
+                • <b>네트워크 통신:</b> C언어 기반의 네트워크 통신 시스템을 구축하기 위해 <a href="network-socket.html" class="wiki-inner-link">소켓 프로그래밍</a> 기초를 학습합니다.<br>
+                • <b>시스템 보안:</b> 실제 흘러가는 데이터를 보고 분석하기 위해 <a href="reverse-packet.html" class="wiki-inner-link">패킷 & 리버스 엔지니어링</a>을 공부합니다.<br>
+                • <b>데이터 관리:</b> 영속성 있는 데이터 저장과 설계를 위해 <a href="db-design.html" class="wiki-inner-link">DB 설계 원리</a> 규칙을 정립합니다.
+            </p>
+
+            <h2>3. 링크 연계 예시</h2>
+            <p>
+                예를 들어, <a href="network-socket.html" class="wiki-inner-link">소켓 프로그래밍</a>을 하다가 버퍼의 메모리 구조가 헷갈린다면 <a href="c-pointer.html" class="wiki-inner-link">포인터와 메모리</a> 문서를 참조하여 지식을 보완해 나가는 방식으로 유기적인 백과사전을 구축합니다.
+            </p>
         </div>
+
+        <footer>
+            © 2026 제아이디-eng. Powered by GitHub Pages.
+        </footer>
     </main>
 
 </body>
