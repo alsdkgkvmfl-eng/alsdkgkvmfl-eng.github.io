@@ -1,160 +1,210 @@
+HTML
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C언어 학습 아카이브</title>
+    <title>제아이디-eng의 기술 블로그</title>
     <style>
-        /* 기본 스타일 및 부드러운 다크/그레이 톤 배경 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+        html {
+            scroll-behavior: smooth; /* 목차 클릭 시 부드럽게 스크롤 이동 */
+        }
         body {
             font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: #f8f9fa;
             color: #333;
-            line-height: 1.6;
-            padding: 40px 20px;
-        }
-        .container {
-            max-width: 750px;
-            margin: 0 auto;
+            display: flex; /* 왼쪽 목차와 오른쪽 본문을 가로로 배치 */
+            min-height: 100vh;
         }
 
-        /* 헤더 디자인 */
-        header {
-            text-align: center;
-            margin-bottom: 50px;
-            padding-bottom: 30px;
-            border-bottom: 2px solid #edf2f7;
+        /* --------------------------------------------------
+           1. 왼쪽 고정 목차 (사이드바) 디자인
+        -------------------------------------------------- */
+        .sidebar {
+            width: 300px;
+            background-color: #1e293b; /* 고급스러운 다크 네이비 톤 */
+            color: #f8fafc;
+            padding: 40px 25px;
+            position: fixed; /* 화면에 항상 고정 */
+            top: 0;
+            bottom: 0;
+            left: 0;
+            overflow-y: auto;
         }
-        .logo {
-            font-size: 40px;
-            margin-bottom: 10px;
-        }
-        header h1 {
-            font-size: 28px;
-            color: #1a202c;
+        .sidebar-title {
+            font-size: 20px;
             font-weight: 800;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #334155;
+            color: #38bdf8; /* 밝은 푸른색 강조 */
         }
-        header p {
-            color: #718096;
-            margin-top: 8px;
+        .menu-list {
+            list-style: none;
+        }
+        .menu-item {
+            margin-bottom: 15px;
+        }
+        .menu-link {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            display: block;
+            padding: 10px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .menu-link:hover {
+            background-color: #334155;
+            color: #ffffff;
+            padding-left: 18px; /* 마우스 올리면 살짝 들어가는 효과 */
         }
 
-        /* 공부 기록 카드 스타일 */
-        .post-card {
+        /* --------------------------------------------------
+           2. 오른쪽 본문 영역 디자인
+        -------------------------------------------------- */
+        .main-content {
+            margin-left: 300px; /* 사이드바 너비만큼 공백 확보 */
+            flex-grow: 1;
+            padding: 60px 50px;
+            max-width: 1000px;
+        }
+
+        /* 각 대분역 파트(섹션) 스타일 */
+        .section-part {
             background: #ffffff;
             border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            padding: 40px;
+            margin-bottom: 50px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             border: 1px solid #e2e8f0;
+            scroll-margin-top: 40px; /* 목차 이동 시 상단 여백 확보 */
         }
-        .post-tag {
-            display: inline-block;
-            background: #ebf8ff;
-            color: #2b6cb0;
-            font-size: 12px;
-            font-weight: bold;
-            padding: 4px 10px;
-            border-radius: 20px;
-            margin-bottom: 12px;
-        }
-        .post-title {
-            font-size: 20px;
-            color: #2d3748;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-        .post-date {
-            font-size: 13px;
-            color: #a0aec0;
-            margin-bottom: 15px;
-        }
-        .post-content {
-            color: #4a5568;
-            font-size: 15px;
-            margin-bottom: 15px;
+        .section-title {
+            font-size: 24px;
+            color: #0f172a;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        /* 💡 C언어 코드 입력용 박스 스타일 */
+        /* 서브 포스트 (각 파트 내의 세부 공부 일지) */
+        .sub-post {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid #94a3b8;
+        }
+        .sub-post h4 {
+            font-size: 16px;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        /* 코드 박스 */
         .code-box {
             background: #1e1e1e;
             color: #d4d4d4;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Courier New', monospace;
             padding: 15px;
             border-radius: 8px;
             font-size: 14px;
             overflow-x: auto;
-            margin: 15px 0;
-            border-left: 4px solid #48bb78;
+            margin-top: 10px;
         }
 
-        /* 푸터 */
         footer {
             text-align: center;
-            margin-top: 60px;
-            color: #a0aec0;
+            margin-top: 8px;
+            color: #94a3b8;
             font-size: 13px;
+        }
+
+        /* 모바일 화면 대응 (화면이 작아지면 목차가 위로 올라감) */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; position: relative; padding: 20px; }
+            .main-content { margin-left: 0; padding: 30px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- 상단 타이틀 부 -->
-        <header>
-            <div class="logo">🖥️</div>
-            <h1>C언어 공부 기록 공간</h1>
-            <p>기초부터 심화까지, 하나씩 채워나가는 개발 블로그</p>
-        </header>
+    <!-- 1. 왼쪽 고정 목차 영역 -->
+    <nav class="sidebar">
+        <div class="sidebar-title">🖥️ Tech Archive</div>
+        <ul class="menu-list">
+            <li class="menu-item"><a href="#part1" class="menu-link">💡 C언어 기초 ~ 심화</a></li>
+            <li class="menu-item"><a href="#part2" class="menu-link">🌐 네트워크 & 소켓</a></li>
+            <li class="menu-item"><a href="#part3" class="menu-link">🔍 패킷 분석 & 리버싱</a></li>
+            <li class="menu-item"><a href="#part4" class="menu-link">🗄️ 데이터베이스 설계</a></li>
+        </ul>
+    </nav>
 
-        <!-- 공부 기록 포스트 1 -->
-        <div class="post-card">
-            <span class="post-tag">Chapter 01</span>
-            <h2 class="post-title">C언어 기본 구조와 Hello World 출력</h2>
-            <p class="post-date">작성일: 2026년 6월</p>
-            <div class="post-content">
-                C언어를 배울 때 가장 먼저 작성하는 기본 코드 구조를 분석했습니다. 
-                printf 함수를 사용하기 위해 헤더 파일을 포함하는 것이 핵심입니다.
+    <!-- 2. 오른쪽 본문 내용 영역 -->
+    <main class="main-content">
+
+        <!-- [파트 1] C언어 -->
+        <section id="part1" class="section-part">
+            <h2 class="section-title">💡 C언어 기초부터 심화까지</h2>
+            <p style="color: #64748b;">C언어의 문법, 메모리 구조, 포인터 및 메모리 동적 할당에 대해 공부한 내용을 기록합니다.</p>
+            
+            <div class="sub-post">
+                <h4>[공부 기록] 포인터와 메모리 주소 이해하기</h4>
+                <p style="font-size: 14px; color: #475569; margin-top: 5px;">포인터 변수는 데이터가 저장된 메모리의 주소값을 가집니다.</p>
+                <pre class="code-box"><code>int num = 10;
+int *ptr = &num; // num의 주소를 포인터에 저장
+printf("주소값: %p", ptr);</code></pre>
             </div>
-            <!-- 코드 예시 박스 -->
-            <pre class="code-box"><code>#include &lt;stdio.h&gt;
+        </section>
 
-int main() {
-    printf("Hello, World!\n");
-    return 0;
-}</code></pre>
-        </div>
-
-        <!-- 공부 기록 포스트 2 (새 내용 작성 시 이 구조를 복사해서 쓰세요) -->
-        <div class="post-card">
-            <span class="post-tag">Chapter 02</span>
-            <h2 class="post-title">변수와 자료형 이해하기</h2>
-            <p class="post-date">작성일: 2026년 6월</p>
-            <div class="post-content">
-                정수를 저장하는 <b>int</b>, 실수를 저장하는 <b>float/double</b>, 문자를 저장하는 <b>char</b> 자료형의 크기와 선언 방법을 정리했습니다.
+        <!-- [파트 2] 네트워크 -->
+        <section id="part2" class="section-part">
+            <h2 class="section-title">🌐 네트워크 기초 및 소켓 프로그래밍</h2>
+            <p style="color: #64748b;">OSI 7계층, TCP/IP 프로토콜의 작동 원리 및 C언어를 이용한 클라이언트/서버 소켓 통신을 공부합니다.</p>
+            
+            <div class="sub-post">
+                <h4>[개념 정리] TCP 3-Way Handshake</h4>
+                <p style="font-size: 14px; color: #475569; margin-top: 5px;">연결을 설정할 때 SYN, SYN-ACK, ACK 패킷을 주고받는 과정을 정리할 예정입니다.</p>
             </div>
-            <pre class="code-box"><code>#include &lt;stdio.h&gt;
+        </section>
 
-int main() {
-    int age = 20;
-    float height = 175.5;
-    char grade = 'A';
-    
-    printf("나이: %d, 키: %.1f\n", age, height);
-    return 0;
-}</code></pre>
-        </div>
+        <!-- [파트 3] 패킷 분석 & 리버싱 -->
+        <section id="part3" class="section-part">
+            <h2 class="section-title">🔍 패킷 분석 및 리버스 엔지니어링</h2>
+            <p style="color: #64748b;">Wireshark를 활용한 패킷 분석과 어셈블리 코드 분석, 실행 파일의 구조(PE 구조)를 파악하는 공부 공간입니다.</p>
+            
+            <div class="sub-post">
+                <h4>[도구] Wireshark 사용법 기초</h4>
+                <p style="font-size: 14px; color: #475569; margin-top: 5px;">특정 IP나 포트로 필터링하여 패킷을 캡처하는 필터 식을 정리할 예정입니다.</p>
+            </div>
+        </section>
 
-        <!-- 하단 정보 -->
+        <!-- [파트 4] 데이터베이스 -->
+        <section id="part4" class="section-part">
+            <h2 class="section-title">🗄️ 데이터베이스(DB) 설계</h2>
+            <p style="color: #64748b;">관계형 데이터베이스(RDBMS)의 설계 원리, ERD 작성법, SQL 문법 및 정규화(Normalization)를 기록합니다.</p>
+            
+            <div class="sub-post">
+                <h4>[SQL] 기본 테이블 생성 및 제약조건</h4>
+                <p style="font-size: 14px; color: #475569; margin-top: 5px;">기본키(Primary Key)와 외래키(Foreign Key) 설정을 연습합니다.</p>
+            </div>
+        </section>
+
         <footer>
-            © 2026 KY. Powered by GitHub Pages.
+            © 2026 제아이디-eng. Powered by GitHub Pages.
         </footer>
-    </div>
+    </main>
 
 </body>
 </html>
