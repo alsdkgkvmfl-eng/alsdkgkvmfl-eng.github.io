@@ -3,206 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>제아이디-eng의 기술 블로그</title>
+    <title>CS & 개발 지식 위키</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        html {
-            scroll-behavior: smooth; /* 목차 클릭 시 부드럽게 스크롤 이동 */
-        }
-        body {
-            font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
-            display: flex; /* 왼쪽 목차와 오른쪽 본문을 가로로 배치 */
-            min-height: 100vh;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: sans-serif; background: #f6f8fa; color: #24292f; display: flex; min-height: 100vh; }
+        
+        /* 위키 사이드바 */
+        .wiki-sidebar { width: 280px; background: #ffffff; border-right: 1px solid #d0d7de; padding: 30px 20px; position: fixed; height: 100vh; }
+        .wiki-logo { font-size: 22px; font-weight: bold; color: #0969da; margin-bottom: 25px; }
+        .category-title { font-size: 14px; font-weight: bold; color: #57606a; margin: 15px 0 5px 0; }
+        .menu-list { list-style: none; padding-left: 10px; }
+        .menu-list a { color: #0969da; text-decoration: none; font-size: 14px; display: block; padding: 4px 0; }
+        .menu-list a:hover { text-decoration: underline; }
 
-        /* --------------------------------------------------
-           1. 왼쪽 고정 목차 (사이드바) 디자인
-        -------------------------------------------------- */
-        .sidebar {
-            width: 300px;
-            background-color: #1e293b; /* 고급스러운 다크 네이비 톤 */
-            color: #f8fafc;
-            padding: 40px 25px;
-            position: fixed; /* 화면에 항상 고정 */
-            top: 0;
-            bottom: 0;
-            left: 0;
-            overflow-y: auto;
-        }
-        .sidebar-title {
-            font-size: 20px;
-            font-weight: 800;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #334155;
-            color: #38bdf8; /* 밝은 푸른색 강조 */
-        }
-        .menu-list {
-            list-style: none;
-        }
-        .menu-item {
-            margin-bottom: 15px;
-        }
-        .menu-link {
-            color: #cbd5e1;
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            display: block;
-            padding: 10px 12px;
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
-        .menu-link:hover {
-            background-color: #334155;
-            color: #ffffff;
-            padding-left: 18px; /* 마우스 올리면 살짝 들어가는 효과 */
-        }
+        /* 위키 본문 */
+        .wiki-body { margin-left: 280px; flex-grow: 1; padding: 40px 60px; max-width: 1000px; }
+        .wiki-title { font-size: 32px; font-weight: normal; border-bottom: 1px solid #d0d7de; padding-bottom: 8px; margin-bottom: 20px; }
+        .wiki-notice { background: #fff8c5; border: 1px solid #d4a72c; padding: 15px; border-radius: 6px; margin-bottom: 25px; font-size: 14px; }
+        
+        /* 위키 스타일 박스 (나무위키 스타일 틀) */
+        .wiki-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        .wiki-table td { border: 1px solid #d0d7de; padding: 12px; }
+        .wiki-table-label { background: #f6f8fa; font-weight: bold; width: 30; text-align: center; }
 
-        /* --------------------------------------------------
-           2. 오른쪽 본문 영역 디자인
-        -------------------------------------------------- */
-        .main-content {
-            margin-left: 300px; /* 사이드바 너비만큼 공백 확보 */
-            flex-grow: 1;
-            padding: 60px 50px;
-            max-width: 1000px;
-        }
-
-        /* 각 대분역 파트(섹션) 스타일 */
-        .section-part {
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 40px;
-            margin-bottom: 50px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e2e8f0;
-            scroll-margin-top: 40px; /* 목차 이동 시 상단 여백 확보 */
-        }
-        .section-title {
-            font-size: 24px;
-            color: #0f172a;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #38bdf8;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* 서브 포스트 (각 파트 내의 세부 공부 일지) */
-        .sub-post {
-            background: #f8fafc;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
-            border-left: 4px solid #94a3b8;
-        }
-        .sub-post h4 {
-            font-size: 16px;
-            color: #1e293b;
-            margin-bottom: 8px;
-        }
-
-        /* 코드 박스 */
-        .code-box {
-            background: #1e1e1e;
-            color: #d4d4d4;
-            font-family: 'Courier New', monospace;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 14px;
-            overflow-x: auto;
-            margin-top: 10px;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 8px;
-            color: #94a3b8;
-            font-size: 13px;
-        }
-
-        /* 모바일 화면 대응 (화면이 작아지면 목차가 위로 올라감) */
-        @media (max-width: 768px) {
-            body { flex-direction: column; }
-            .sidebar { width: 100%; position: relative; padding: 20px; }
-            .main-content { margin-left: 0; padding: 30px 20px; }
-        }
+        .wiki-text { line-height: 1.8; font-size: 16px; }
+        .wiki-link { color: #0969da; text-decoration: none; }
+        .wiki-link:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
 
-    <!-- 1. 왼쪽 고정 목차 영역 -->
-    <nav class="sidebar">
-        <div class="sidebar-title">🖥️ Tech Archive</div>
+    <!-- 왼쪽 위키 목차 -->
+    <aside class="wiki-sidebar">
+        <div class="wiki-logo">📖 나의 지식 위키</div>
+        
+        <div class="category-title">C언어</div>
         <ul class="menu-list">
-            <li class="menu-item"><a href="#part1" class="menu-link">💡 C언어 기초 ~ 심화</a></li>
-            <li class="menu-item"><a href="#part2" class="menu-link">🌐 네트워크 & 소켓</a></li>
-            <li class="menu-item"><a href="#part3" class="menu-link">🔍 패킷 분석 & 리버싱</a></li>
-            <li class="menu-item"><a href="#part4" class="menu-link">🗄️ 데이터베이스 설계</a></li>
+            <li><a href="index.html">메인 페이지</a></li>
+            <li><a href="c-pointer.html">포인터 개론</a></li>
         </ul>
-    </nav>
 
-    <!-- 2. 오른쪽 본문 내용 영역 -->
-    <main class="main-content">
+        <div class="category-title">네트워크</div>
+        <ul class="menu-list">
+            <li><a href="network-basic.html">OSI 7계층 개요</a></li>
+        </ul>
+    </aside>
 
-        <!-- [파트 1] C언어 -->
-        <section id="part1" class="section-part">
-            <h2 class="section-title">💡 C언어 기초부터 심화까지</h2>
-            <p style="color: #64748b;">C언어의 문법, 메모리 구조, 포인터 및 메모리 동적 할당에 대해 공부한 내용을 기록합니다.</p>
+    <!-- 오른쪽 위키 본문 -->
+    <main class="wiki-body">
+        <h1 class="wiki-title">대문: 컴퓨터 공학 아카이브</h1>
+        
+        <div class="wiki-notice">
+            💡 본 사이트는 개인의 학습 데이터를 누적하고 정리하는 백과사전식 위키 공간입니다.
+        </div>
+
+        <div class="wiki-text">
+            <h2>1. 개요</h2>
+            <p>공부한 지식들을 나무위키 형태로 정리합니다. 문서 내의 파란색 링크를 클릭하면 해당 문서로 이동합니다.</p>
+            <br>
             
-            <div class="sub-post">
-                <h4>[공부 기록] 포인터와 메모리 주소 이해하기</h4>
-                <p style="font-size: 14px; color: #475569; margin-top: 5px;">포인터 변수는 데이터가 저장된 메모리의 주소값을 가집니다.</p>
-                <pre class="code-box"><code>int num = 10;
-int *ptr = &num; // num의 주소를 포인터에 저장
-printf("주소값: %p", ptr);</code></pre>
-            </div>
-        </section>
-
-        <!-- [파트 2] 네트워크 -->
-        <section id="part2" class="section-part">
-            <h2 class="section-title">🌐 네트워크 기초 및 소켓 프로그래밍</h2>
-            <p style="color: #64748b;">OSI 7계층, TCP/IP 프로토콜의 작동 원리 및 C언어를 이용한 클라이언트/서버 소켓 통신을 공부합니다.</p>
-            
-            <div class="sub-post">
-                <h4>[개념 정리] TCP 3-Way Handshake</h4>
-                <p style="font-size: 14px; color: #475569; margin-top: 5px;">연결을 설정할 때 SYN, SYN-ACK, ACK 패킷을 주고받는 과정을 정리할 예정입니다.</p>
-            </div>
-        </section>
-
-        <!-- [파트 3] 패킷 분석 & 리버싱 -->
-        <section id="part3" class="section-part">
-            <h2 class="section-title">🔍 패킷 분석 및 리버스 엔지니어링</h2>
-            <p style="color: #64748b;">Wireshark를 활용한 패킷 분석과 어셈블리 코드 분석, 실행 파일의 구조(PE 구조)를 파악하는 공부 공간입니다.</p>
-            
-            <div class="sub-post">
-                <h4>[도구] Wireshark 사용법 기초</h4>
-                <p style="font-size: 14px; color: #475569; margin-top: 5px;">특정 IP나 포트로 필터링하여 패킷을 캡처하는 필터 식을 정리할 예정입니다.</p>
-            </div>
-        </section>
-
-        <!-- [파트 4] 데이터베이스 -->
-        <section id="part4" class="section-part">
-            <h2 class="section-title">🗄️ 데이터베이스(DB) 설계</h2>
-            <p style="color: #64748b;">관계형 데이터베이스(RDBMS)의 설계 원리, ERD 작성법, SQL 문법 및 정규화(Normalization)를 기록합니다.</p>
-            
-            <div class="sub-post">
-                <h4>[SQL] 기본 테이블 생성 및 제약조건</h4>
-                <p style="font-size: 14px; color: #475569; margin-top: 5px;">기본키(Primary Key)와 외래키(Foreign Key) 설정을 연습합니다.</p>
-            </div>
-        </section>
-
-        <footer>
-            © 2026 KY. Powered by GitHub Pages.
-        </footer>
+            <h2>2. 학습 로드맵 목록</h2>
+            <table class="wiki-table">
+                <tr>
+                    <td class="wiki-table-label">C언어</td>
+                    <td>기초 문법부터 메모리 구조 심화 학습. 상세 내용은 <a class="wiki-link" href="c-pointer.html">포인터 개론</a> 참고.</td>
+                </tr>
+                <tr>
+                    <td class="wiki-table-label">네트워크</td>
+                    <td>소켓 프로그래밍 및 <a class="wiki-link" href="network-basic.html">OSI 7계층 개요</a> 공부 기록.</td>
+                </tr>
+            </table>
+        </div>
     </main>
 
 </body>
